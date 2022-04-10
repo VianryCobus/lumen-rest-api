@@ -17,9 +17,16 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+
+
 $router->group(['prefix' => 'api'], function()use ($router) {
-    $router->get('/posts','PostController@index');
-    $router->post('/posts','PostController@store');
-    $router->put('/posts/{id}','PostController@update');
-    $router->delete('/posts/{id}','PostController@destroy');
-});
+    $router->post('/api/login','AuthController@login');
+    $router->post('/api/register','AuthController@register');
+    $router->group(['middleware'=> 'auth'], function () use ($router){
+        $router->post('/api/logout','AuthController@logout');
+        $router->get('/posts','PostController@index');
+        $router->post('/posts','PostController@store');
+        $router->put('/posts/{id}','PostController@update');
+        $router->delete('/posts/{id}','PostController@destroy');
+    });
+    });
